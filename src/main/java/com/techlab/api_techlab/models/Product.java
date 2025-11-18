@@ -10,8 +10,6 @@ public class Product {
 
   // 🔹 Constructores completo
   public Product(String name, String description, int stock, double price) {
-    this.id = nextId;
-    nextId++;
     this.name = name;
     this.description = description;
     this.stock = stock;
@@ -22,8 +20,14 @@ public class Product {
     this(name, description, 0, 0.0);
   }
 
+  public Product() {
+  }
+
   // Métodos
   public int getId() { return id; }
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public String getName() { return name; }
   public void setName(String name) { this.name = name; }

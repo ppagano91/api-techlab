@@ -1,6 +1,7 @@
 package com.techlab.api_techlab.controllers;
 
 import com.techlab.api_techlab.models.Product;
+import com.techlab.api_techlab.services.ProductService;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,28 +11,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProductController {
 
+  private ProductService service;
+
+  public ProductController(ProductService productService){
+    this.service = productService;
+  }
+
 
   @PostMapping("/products")
   // public Product addProduct(){
-  public Map<String, String> addProduct(){
-    // Product newProduct = new Product(...);
-    Map<String, String> newProduct = new HashMap<>();
-    newProduct.put("message", "Producto creado exitosamente");
-    return newProduct;
+  public Product addProduct(@RequestBody Product newProduct){
+    return this.service.addProduct(newProduct);
   }
 
   @GetMapping("/products")
-  public ArrayList<Product> getAllProducts(){
+  public Map<String, Object> getAllProducts(){
 
-    ArrayList<Product> products = new ArrayList<Product>();
+    ArrayList<Product> products = this.service.getAll();
+    Map<String, Object> response = new HashMap<>();
+    response.put("productos", products);
+    response.put("error", "false");
+    response.put("status_code", "200");
 
-    return products;
+
+
+    return response;
   }
 
   @GetMapping("/products/{id}")
