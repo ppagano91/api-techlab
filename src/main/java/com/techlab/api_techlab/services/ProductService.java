@@ -1,5 +1,6 @@
 package com.techlab.api_techlab.services;
 
+import com.techlab.api_techlab.exceptions.ProductNotFoundException;
 import com.techlab.api_techlab.models.Product;
 import com.techlab.api_techlab.repositories.ProductRepository;
 import com.techlab.api_techlab.utils.ProductValidator;
@@ -20,7 +21,13 @@ public class ProductService {
   }
 
   public Product getById(int id) {
-    return repository.findById(id);
+    Product product = repository.findById(id);
+
+    if (product == null) {
+      throw new ProductNotFoundException("El producto con id " + id + " no existe.");
+    }
+
+    return product;
   }
 
   public Product addProduct(Product product) {

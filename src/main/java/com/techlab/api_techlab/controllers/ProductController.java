@@ -41,7 +41,11 @@ public class ProductController {
   }
 
   @GetMapping("/products")
-  public Map<String, Object> getAllProducts(){
+  public Map<String, Object> getAllProducts(
+      @RequestParam(required = false, defaultValue = "") String name,
+      @RequestParam(required = false, defaultValue = "") String description,
+      @RequestParam(required = false) int price
+  ){
 
     ArrayList<Product> products = this.service.getAll();
     Map<String, Object> response = new HashMap<>();
@@ -55,11 +59,16 @@ public class ProductController {
   }
 
   @GetMapping("/products/{id}")
-  public ArrayList<Product> getProductById(@PathVariable int id){
+  public Map<String, Object> getProductById(@PathVariable int id){
 
-    ArrayList<Product> products = new ArrayList<Product>();
+    Product product = this.service.getById(id);
 
-    return products;
+    Map<String, Object> response = new HashMap<>();
+    response.put("productos", product);
+    response.put("error", "false");
+    response.put("status_code", "200");
+
+    return response;
   }
 
   @GetMapping("/products/search")
