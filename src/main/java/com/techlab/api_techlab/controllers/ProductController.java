@@ -27,8 +27,17 @@ public class ProductController {
 
   @PostMapping("/products")
   // public Product addProduct(){
-  public Product addProduct(@RequestBody Product newProduct){
-    return this.service.addProduct(newProduct);
+  public Map<String, Object> addProduct(@RequestBody Product newProduct){
+    Product savedProduct = this.service.addProduct(newProduct);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("product", savedProduct);
+    response.put("status_code", 201);
+    response.put("error", false);
+    response.put("message", "Producto agregado correctamente");
+
+    return response;
+
   }
 
   @GetMapping("/products")

@@ -30,8 +30,7 @@ public class ProductRepository {
   }
 
   public Product save(Product newProduct) {
-    newProduct.setId(nextId);
-    nextId++;
+    this.updateId(newProduct);
     this.products.add(newProduct);
 
     return newProduct;
@@ -50,18 +49,29 @@ public class ProductRepository {
     }
   }
 
+  private void updateId(Product product){
+    product.setId(nextId);
+    nextId++;
+  }
+
   private List<Product> loadProductsFromJSON(ObjectMapper objectMapper) {
     try {
       ClassPathResource resource = new ClassPathResource("data/data.json");
       try (InputStream is = resource.getInputStream()) {
-        return objectMapper.readValue(
+        List<Product> products = objectMapper.readValue(
             is,
             new TypeReference<List<Product>>() {}
         );
+
+        for (Product p : products) {
+          this.updateId(p);
+        }
+
+        return products;
       }
     } catch (Exception e) {
       System.out.println("⚠️ Error al leer data.json: " + e.getMessage());
-      return List.of(); // lista vacía si falla
+      return List.of(); // lista vacía
     }
   }
 
