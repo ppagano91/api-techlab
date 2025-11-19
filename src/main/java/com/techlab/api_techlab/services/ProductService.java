@@ -2,6 +2,7 @@ package com.techlab.api_techlab.services;
 
 import com.techlab.api_techlab.models.Product;
 import com.techlab.api_techlab.repositories.ProductRepository;
+import com.techlab.api_techlab.utils.ProductValidator;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ProductService {
   }
 
   public Product addProduct(Product product) {
+    ProductValidator.validate(product);
     return this.repository.save(product);
   }
-
 }
