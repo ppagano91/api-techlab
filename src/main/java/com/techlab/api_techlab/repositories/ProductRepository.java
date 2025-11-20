@@ -4,6 +4,7 @@ import com.techlab.api_techlab.models.Product;
 import java.util.ArrayList;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,32 +19,36 @@ public class ProductRepository {
     this.products.addAll(loadProductsFromJSON(objectMapper));
   }
 
-  public ArrayList<Product> findAll() {
-    return this.products;
+  public ArrayList<Product> findAllProducts(String name, String description, Double price) {
+    return this.products.stream()
+        .filter(p -> name == null || p.getName().toLowerCase().contains(name.toLowerCase()))
+        .filter(p -> description == null || p.getDescription().toLowerCase().contains(description.toLowerCase()))
+        .filter(p -> price == null || (p.getPrice() != null && p.getPrice().equals(price)))
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
-  public Product findById(int id) {
+  public Product findProductById(int id) {
     return this.products.stream()
         .filter(p -> p.getId() == id)
         .findFirst()
         .orElse(null);
   }
 
-  public Product save(Product newProduct) {
+  public Product saveProduct(Product newProduct) {
     this.updateId(newProduct);
     this.products.add(newProduct);
 
     return newProduct;
   }
 
-  public void delete(int id) {
+  public void deleteProduct(int id) {
     this.products.removeIf(p -> p.getId() == id);
   }
 
-  public void update(Product actualizado) {
+  public void updateProduct(Product product) {
     for (int i = 0; i < this.products.size(); i++) {
-      if (this.products.get(i).getId() == actualizado.getId()) {
-        this.products.set(i, actualizado);
+      if (this.products.get(i).getId() == product.getId()) {
+        this.products.set(i, product);
         return;
       }
     }

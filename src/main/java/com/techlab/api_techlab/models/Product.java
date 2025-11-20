@@ -5,11 +5,11 @@ public class Product {
   private int id;
   private String name;
   private String description;
-  private int stock;
-  private double price;
+  private Integer stock;
+  private Double price;
 
   // 🔹 Constructores completo
-  public Product(String name, String description, int stock, double price) {
+  public Product(String name, String description, Integer stock, Double price) {
     this.name = name;
     this.description = description;
     this.stock = stock;
@@ -35,11 +35,11 @@ public class Product {
   public String getDescription() { return description; }
   public void setDescription(String description) { this.description = description; }
 
-  public int getStock() { return stock; }
-  public void setStock(int stock) { this.stock = stock; }
+  public Integer getStock() { return stock; }
+  public void setStock(Integer stock) { this.stock = stock; }
 
-  public double getPrice() { return price; }
-  public void setPrice(double price) { this.price = price; }
+  public Double getPrice() { return price; }
+  public void setPrice(Double price) { this.price = price; }
 
   public void updateStock(int subtract){
     if (this.stock >= subtract){
