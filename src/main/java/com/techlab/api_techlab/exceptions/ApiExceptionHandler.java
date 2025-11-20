@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -47,5 +48,18 @@ public class ApiExceptionHandler {
     error.put("timestamp", LocalDateTime.now());
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<Map<String, Object>> handleTypeMismatch(
+      MethodArgumentTypeMismatchException ex) {
+
+    Map<String, Object> error = new HashMap<>();
+    error.put("error", true);
+    error.put("status_code", 400);
+    error.put("message", "El parámetro '" + ex.getName() + "' debe ser un número entero.");
+    error.put("timestamp", LocalDateTime.now());
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
 }
